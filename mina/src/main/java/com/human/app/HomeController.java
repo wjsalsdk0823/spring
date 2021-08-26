@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Handles requests for the application home page.
@@ -50,28 +52,52 @@ public class HomeController {
 		return "getinfo";
 	}
 	@RequestMapping("/info")
-	public String doInfo(HttpServletRequest hsr, Model model) {
-		String uid=hsr.getParameter("userid");
-		String addr=hsr.getParameter("address");
+	//아래꺼는 첫번째 방법 그 아래는 두번째 방법
+//	public String doInfo(HttpServletRequest hsr, Model model) {
+//		String uid=hsr.getParameter("userid");
+//		String addr=hsr.getParameter("address");
+	public String doInfo(@RequestParam("userid")String uid,
+						 @RequestParam("address")String addr,
+						 @RequestParam("income") int salary,//형변환?
+						 Model model) {
 		System.out.println("uid="+uid);
 		System.out.println("addr="+addr);
 		model.addAttribute("loginid",uid);
 		model.addAttribute("region",addr);
 		return "viewinfo";
-	}
+	}	
+	//아래 command객체라고한다
+	public String doInfo(ParamList pl, Model model) {
+		System.out.println("uid="+pl.userid);
+		System.out.println("addr="+pl.address);
+		model.addAttribute("loginid",pl.userid);
+		model.addAttribute("region",pl.address);
+		return "viewinfo";
+	}		
 	@RequestMapping("/choose")
 	public String doChoose() {
 		return "choose";
 	}
 	@RequestMapping("/selected")
-	public String doJob(HttpServletRequest hsr,Model model) {
-		String strPath=hsr.getParameter("path");
+//	public String doJob(HttpServletRequest hsr,Model model) {
+//		String strPath=hsr.getParameter("path");
+		public String doJob(@RequestParam("path") String strPath) {
 		if(strPath.equals("login")) {
 			return "getinfo";
 		} else if(strPath.equals("newbie")) {
 			return "newbie";
 		} else {
-			return "choose";
+			return "redirect:choose";//redirect요청경로
 		}
 	}
+	@RequestMapping("/today/{address}/{userid}")
+	public String showNumaber(@PathVariable String address, @PathVariable String userid,Model model) {
+		model.addAttribute("addr",address);
+		model.addAttribute("uid",userid);
+		if(userid.equals("xaexal")) {
+			return "today";
+		}else {
+			return "redirect:choose";
+	}
+}
 }

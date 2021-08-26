@@ -12,5 +12,12 @@
 	address: <input type=text name=address><br>
 	<input type=submit value="전송">
 </form>
+<%
+	int i;
+	for(i=0;i<10; i++){
+		out.println("<p>"+i+"</p>");
+	}
+%>
+<%=i %>
 </body>
 </html>

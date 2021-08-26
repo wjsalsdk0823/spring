@@ -4,11 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>information</title>
+<title>Insert title here</title>
 </head>
 <body>
-<P>${loginid }</P>
-<P>${region }</P>
 
+<p> 실명:${n}</p>
+<p> 아이디:${i}</p>
+<p> 비밀번호:${p}</p>
+<p> 모바일번호:${m}</p>
+<a href="/com">홈</a>
 </body>
 </html>

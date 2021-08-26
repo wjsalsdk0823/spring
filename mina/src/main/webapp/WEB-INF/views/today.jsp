@@ -4,11 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>information</title>
+<title>today</title>
 </head>
 <body>
-<P>${loginid }</P>
-<P>${region }</P>
-
+<P>userid: ${uid}</P>
+<P>address: ${addr}</P>
 </body>
 </html>
