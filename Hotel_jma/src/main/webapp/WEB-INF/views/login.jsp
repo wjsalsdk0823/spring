@@ -7,10 +7,12 @@
 <title>login</title>
 </head>
 <body>
-<form method="get" action="/com/viewinfo">
-로그인 아이디:<input type=text name=realname><br>
+<form method="post" action="/check_user">
+로그인 아이디:<input type=text name=userid><br>
 비밀번호:<input type = text name=passcode ><br>
-<input type=submit value="확인">
+<input type=submit value="로그인">
+<a href="/">홈페이지</a>
 </form>
+
 </body>
 </html>

@@ -12,6 +12,7 @@
 <p> 아이디:${i}</p>
 <p> 비밀번호:${p}</p>
 <p> 모바일번호:${m}</p>
-<a href="/com">홈</a>
+<a href="/login">회원가입</a>
+<a href="/">취소</a>
 </body>
 </html>

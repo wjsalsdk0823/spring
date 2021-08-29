@@ -10,7 +10,7 @@
 <h1>
 안녕하세요 NCS Hotel입니다  
 </h1>
-<a href='login?path=login'>로그인</a>&nbsp;&nbsp;
+<a href='login?path=login'>관리자 로그인</a>&nbsp;&nbsp;
 <a href='newbie?path=newbie'>회원가입</a>
 </body>
 </html>

@@ -10,6 +10,7 @@
 
 <P> 로그인 : ${login}</P>
 <P> 비밀번호 : ${newbie}</P>
-<a href="/com">홈</a>
+<a href="/com/booking">객실관리</a>
+<a href="/com">홈페이지 취소</a>
 </body>
 </html>
