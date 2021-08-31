@@ -1,12 +1,14 @@
 package com.human.com;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
 	private HttpSession session;
+	@Autowired
+	private SqlSession sqlSession;
+	
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -73,9 +79,12 @@ public class HomeController {
 	public String check_user(HttpServletRequest hsr,Model model) {
 		String userid=hsr.getParameter("userid");
 		String passcode=hsr.getParameter("passcode");	
+		
+		//DB에서 유저확인:기존유저면 booking 없으면 home으로 
 		HttpSession session=hsr.getSession();
-		session.setAttribute("loginid",userid);		
-		return "redirect:/booking";
+		session.setAttribute("loginid",userid);
+		
+		return "redirect:/booking";//RequestMapping의 경로 이동
 	}
 	@RequestMapping(value="/booking",method = RequestMethod.GET)
 	public String booking(HttpServletRequest hsr) {
@@ -88,14 +97,21 @@ public class HomeController {
 	}
 }
 	@RequestMapping("/room")
-	public String room(HttpServletRequest hsr) {
+	public String room(HttpServletRequest hsr, Model model) {
 		HttpSession session=hsr.getSession();
 		if(session.getAttribute("loginid")==null) {
 			return "redirect:/login";
 		}else {
+		//여기서 인터페이스 호출하고 결과를 room.jsp에 전달
+			iRoom room=sqlSession.getMapper(iRoom.class);
+			ArrayList<Roominfo> roominfo=room.getRoomList();
+			model.addAttribute("list",roominfo);
+			
+			ArrayList<RoomType> roomtype=room.getRoomType();
+			model.addAttribute("list2",roomtype);
 		return"room";
+		}
 	}
-}
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest hsr) {
 		HttpSession session=hsr.getSession();
