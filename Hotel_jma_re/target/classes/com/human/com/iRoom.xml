@@ -5,10 +5,10 @@
 
 <mapper namespace="com.human.com.iRoom">
 	<select id="getRoomList" resultType="com.human.com.Roominfo">
-		select roomcode,name,type,howmany,howmuch from room order by name
-		<!-- select a.roomcode,a.name roomname,b.name typenaem,a.howmany,a.howmuch
+		select a.roomcode,a.name roomname,b.name typename,a.howmany,a.howmuch
 		from room a, roomtype b
-		where a. type=b.typecode -->
+		where a.type=b.typecode
+		order by roomcode
 	</select>	
 	<select id="getRoomType" resultType="com.human.com.RoomType">
 		select typecode,name from roomtype order by typecode

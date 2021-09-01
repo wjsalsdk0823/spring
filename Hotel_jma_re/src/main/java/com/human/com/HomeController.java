@@ -98,16 +98,20 @@ public class HomeController {
 }
 	@RequestMapping("/room")
 	public String room(HttpServletRequest hsr, Model model) {
+		System.out.println("/room");
 		HttpSession session=hsr.getSession();
 		if(session.getAttribute("loginid")==null) {
 			return "redirect:/login";
 		}else {
+			System.out.println("room.jsp");
 		//여기서 인터페이스 호출하고 결과를 room.jsp에 전달
 			iRoom room=sqlSession.getMapper(iRoom.class);
 			ArrayList<Roominfo> roominfo=room.getRoomList();
+			System.out.println(roominfo);
 			model.addAttribute("list",roominfo);
 			
 			ArrayList<RoomType> roomtype=room.getRoomType();
+			System.out.println(roomtype);
 			model.addAttribute("list2",roomtype);
 		return"room";
 		}

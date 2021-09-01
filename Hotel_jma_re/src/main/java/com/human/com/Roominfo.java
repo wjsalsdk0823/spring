@@ -2,16 +2,16 @@ package com.human.com;
 
 public class Roominfo {
 	private int roomcode;
-	private String name;
-	private int type;
+	private String roomname;
+	private String typename;
 	private int howmany;
 	private int howmuch;
 	public Roominfo() {}
-	public Roominfo(int roomcode, String name, int type, int howmany, int howmuch) {
+	public Roominfo(int roomcode, String roomname, String typename, int howmany, int howmuch) {
 		//super();
 		this.roomcode = roomcode;
-		this.name = name;
-		this.type = type;
+		this.roomname = roomname;
+		this.typename = typename;
 		this.howmany = howmany;
 		this.howmuch = howmuch;
 	}
@@ -21,17 +21,17 @@ public class Roominfo {
 	public void setRoomcode(int roomcode) {
 		this.roomcode = roomcode;
 	}
-	public String getName() {
-		return name;
+	public String getRoomname() {
+		return roomname;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setRoomname(String roomname) {
+		this.roomname = roomname;
 	}
-	public int getType() {
-		return type;
+	public String getTypename() {
+		return typename;
 	}
-	public void setType(int type) {
-		this.type = type;
+	public void setTypename(String typename) {
+		this.typename = typename;
 	}
 	public int getHowmany() {
 		return howmany;
@@ -45,5 +45,6 @@ public class Roominfo {
 	public void setHowmuch(int howmuch) {
 		this.howmuch = howmuch;
 	}
+	
 	
 }

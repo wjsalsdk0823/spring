@@ -13,9 +13,9 @@
 <table border=1>
 	<tr>
 		<td>        
-	        <select id="selRoomList" size=10 style='width:250px;'>
+	        <select id="selRoom" size=10 style='width:250px;'>
 	        <c:forEach items="${list}" var="room">
-	        	<option value='${room.roomcode}'>${room.name},${room.type},${room.howmany},${room.howmuch}</option>
+	        	<option value='${room.roomcode}'>${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
 	        </c:forEach>
 	        </select>
         </td>
@@ -29,8 +29,8 @@
         		<td align=right>타입</td>
         		<td>
         			<select size=5 style='width:120px;' id=selType>
-        			<c:forEach items="${list2}" var="roomtype">
-	        			<option value='${roomtype.typecode}'>${roomtype.name}</option>
+        			<c:forEach items="${list2}" var="room">
+	        			<option value='${room.typecode}'>${room.name}</option>
 	        		</c:forEach> 
         			</select>	
         		</td>
@@ -55,23 +55,22 @@
       </body>
       <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
       <script>
-      	 $(document)
-         .ready(function(){
-        	 
-        	 console.log($("#selRoomList option:selected").val())
-        	 
-        	 $("#selRoomList").change(function(){
-        		 $("#txtName").val($("#selRoomList option:checked").text().substring(0,3));
-        	 })
-         })
-        
-//       $(document).on('click','#'){
-    	  
-//       }
-
-     	
-      	
-   		
+      $(document)
+      .on('click','#selRoom option',function(){
+    	let str=$(this).text();
+    	let ar=str.split(',');
+    	 $("#txtName").val(ar[0]);
+    	 $('#selType option:contains("'+ar[1]+'")').attr('selected','selected');
+    	 $("#txtNum").val(ar[2]);
+    	 $("#txtPrice").val(ar[3]);
+    	 let code=$(this).val();
+    	 $('#roomcode').val(code);
+    	 return false;
+      })
+      .on('click','#btnEmpty',function(){
+    	  $('#txtName,#txtNum,#txtPrice,#roomcode,#selType').val('');
+    	  return false;
+      })			
       </script>
       </html>
   <!--   <table  border=1>
