@@ -14,9 +14,9 @@
 	<tr>
 		<td>        
 	        <select id="selRoom" size=10 style='width:250px;'>
-	        <c:forEach items="${list}" var="room">
+	      <%--   <c:forEach items="${list}" var="room">
 	        	<option value='${room.roomcode}'>${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
-	        </c:forEach>
+	        </c:forEach> --%>
 	        </select>
         </td>
         <td>
@@ -56,6 +56,17 @@
       <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
       <script>
       $(document)
+      //아래는 ajax호출 하는 법
+      .ready(function(){    
+    	  $.post("http://localhost:8081/getRoomList",{},function(result){
+    		  console.log(result);
+    		  $.each(result,function(ndx,value){
+    			  str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
+    			  	  value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+    			  	  $('#selRoom').append(str);
+    		  });
+    	  },'json');
+      })
       .on('click','#selRoom option',function(){
     	let str=$(this).text();
     	let ar=str.split(',');
@@ -63,6 +74,7 @@
     	 $('#selType option:contains("'+ar[1]+'")').attr('selected','selected');
     	 $("#txtNum").val(ar[2]);
     	 $("#txtPrice").val(ar[3]);
+    	 //
     	 let code=$(this).val();
     	 $('#roomcode').val(code);
     	 return false;
@@ -70,7 +82,49 @@
       .on('click','#btnEmpty',function(){
     	  $('#txtName,#txtNum,#txtPrice,#roomcode,#selType').val('');
     	  return false;
-      })			
+      })
+      .on('click','#btnDelete',function(){
+    	  $.post("http://localhost:8081/deleteRoom",{roomcode:$('#roomcode').val()},
+    			  function(result){
+    		  console.log(result);
+    		  if(result=="ok"){
+    			  $('#btnEmpty').trigger('click');//입력란 비우기
+    			  $('#selRoom option:selected').remove();//room리스트에서 제거
+    		  }
+    	  },'text');
+    	  return false;
+      })
+      .on('click','#btnAdd',function(){
+    	  let roomname=$('#txtName').val();
+    	  let roomtype=$('#selType').val();
+    	  let howmany=$('#txtNum').val();
+    	  let howmuch=$('#txtPrice').val();
+    	  //validation(유효성검사)
+    	  if(roomname=='' || roomtype=='' || howmany=='' || howmuch==''){
+    		  alert('누락된 값이 있습니다.');
+    		  return false;
+    	  }
+    	  let roomcode$=('#roomcode').val();
+    	  if(roomcode==''){//insert
+    	  $.post('http://localhost:8081/addRoom',
+    		 {roomname:roomname,roomtype:roomtype,howmany:howmany,howmuch:howmuch},
+    		 function(result){
+    			 if(result=='ok'){
+    				 location.reload();
+    			 }
+    		 },'text');
+    	 } else {//update
+    		 $.post('http://localhost:8081/updateRoom',
+    				 {roomcode:roomcode,roomname:roomname,
+    			 	 roomtype:roomtype,howmany:howmany,
+    			 	 howmuch:howmuch},
+    			 	 function(result){
+    			 		 if(result=='ok'){
+    			 			 location.reload();
+    			 		 }
+    			 	 },'text');
+    	 } 
+         })    
       </script>
       </html>
   <!--   <table  border=1>

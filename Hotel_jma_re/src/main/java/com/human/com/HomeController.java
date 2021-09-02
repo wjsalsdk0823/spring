@@ -17,7 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 /**
  * Handles requests for the application home page.
  */
@@ -106,12 +108,14 @@ public class HomeController {
 			System.out.println("room.jsp");
 		//여기서 인터페이스 호출하고 결과를 room.jsp에 전달
 			iRoom room=sqlSession.getMapper(iRoom.class);
-			ArrayList<Roominfo> roominfo=room.getRoomList();
-			System.out.println(roominfo);
-			model.addAttribute("list",roominfo);
 			
-			ArrayList<RoomType> roomtype=room.getRoomType();
-			System.out.println(roomtype);
+			/*
+			 * ArrayList<Roominfo> roominfo=room.getRoomList();
+			 * model.addAttribute("list",roominfo);
+			 */
+			 
+			
+			ArrayList<RoomType> roomtype=room.getRoomType();			
 			model.addAttribute("list2",roomtype);
 		return"room";
 		}
@@ -122,4 +126,56 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:/";
 }
+	@RequestMapping(value="/getRoomList",method = RequestMethod.POST,
+			produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String getRoomList(HttpServletRequest hsr) {
+		iRoom room=sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo=room.getRoomList();//camel notation 
+		//찾아진 데이터로 joonarray만들기
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<roominfo.size();i++) {
+			JSONObject jo=new JSONObject();
+			jo.put("roomcode", roominfo.get(i).getRoomcode());
+			jo.put("roomname", roominfo.get(i).getRoomname());
+			jo.put("typename", roominfo.get(i).getTypename());
+			jo.put("howmany", roominfo.get(i).getHowmany());			
+			jo.put("howmuch", roominfo.get(i).getHowmuch());
+			ja.add(jo);
+		}
+		return ja.toString();
+	}
+	@RequestMapping(value="/deleteRoom",method = RequestMethod.POST,
+			produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String deleteRoom(HttpServletRequest hsr) {
+		int roomcode=Integer.parseInt(hsr.getParameter("roomcode"));
+		iRoom room=sqlSession.getMapper(iRoom.class);
+		room.doDeleteRoom(roomcode);
+		return  "ok";
+	}
+	@RequestMapping(value="/addRoom",method = RequestMethod.POST,
+			produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String addRoom(HttpServletRequest hsr) {
+		String rname=hsr.getParameter("roomname");
+		int rtype=Integer.parseInt(hsr.getParameter("roomtype"));
+		int howmany=Integer.parseInt(hsr.getParameter("howmany"));
+		int howmuch=Integer.parseInt(hsr.getParameter("howmuch"));
+		iRoom room=sqlSession.getMapper(iRoom.class);
+		room.doAddRoom(rname,rtype,howmany,howmuch);
+		return "ok";
+	}
+	@RequestMapping(value="/updateRoom",method = RequestMethod.POST,
+			produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String updateRoom(HttpServletRequest hsr) {
+		iRoom room=sqlSession.getMapper(iRoom.class);
+		room.doUpdateRoom(Integer.parseInt(hsr.getParameter("roomcode")),
+				hsr.getParameter("roomname"),
+				Integer.parseInt(hsr.getParameter("roomtype")),
+				Integer.parseInt(hsr.getParameter("howmany")),
+				Integer.parseInt(hsr.getParameter("howmuch")));
+		return "ok";
+	}
 }	
