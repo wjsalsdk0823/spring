@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.human.com.iRoom">
+	<select id="getRoomList" resultType="com.human.com.Roominfo">
+		select a.roomcode,a.name roomname,b.name typename,a.howmany,a.howmuch
+		from room a, roomtype b
+		where a.type=b.typecode
+		order by roomcode
+	</select>
+	<select id="getRoomType" resultType="com.human.com.RoomType">
+		select typecode,name from roomtype order by typecode
+	</select>
+	<delete id="doDeleteRoom">
+		delete from room where roomcode=#{param1}
+	</delete>
+	<insert id="doAddRoom">
+		insert into room(roomcode,name,type,howmany,howmuch)
+		values(seqroom.nextval,#{param1},#{param2},#{param3},#{param4})
+	</insert>
+	<update id="doUpdateRoom">
+		update room set name=#{param2},type=#{param3},howmany=#{param4},howmuch=#{param5}
+		where roomcode=#{param1}
+	</update>
+	<insert id="doSignin">
+      insert into member(name,loginid,passcode)
+      values(#{param1},#{param2},#{param3})
+   </insert>
+   <select id="doCheckUser" resultType="int">
+   		select count(*) from member where loginid=#{param1} and passcode=#{param2}
+   </select>
+   <insert id='doAddBooking'>
+      insert into booking(bookcode,roomcode,person,checkin,checkout,name,mobile)
+      values(bookcode.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6})
+   </insert>
+   <select id="getBookingList" resultType="com.human.com.Book" >
+   	  select bookcode,roomcode,person,checkin,checkout,name,mobile from booking 
+   </select>
+   <select id="getBookedList" resultType="com.human.com.Booked">
+   <![CDATA[
+      select *
+      from booking a, room b
+      where a.roomcode = b.roomcode and
+      a.checkout > #{param1} and a.checkin < #{param2}
+      order by a.checkin
+      ]]>
+   </select>
+</mapper>
