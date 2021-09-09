@@ -116,6 +116,7 @@
        		   {checkin:$('#period1').val(),checkout:$('#period2').val()},
        		   function(result){
            		  console.log(result);
+           		  $('#selBooked').empty();//조회버튼 누르면 예약된 객실 비우고 채워지는 
            		  $.each(result,function(ndx,value){
            			  str='<option value="'+value['bookcode']+'">'+value['roomcode']+','+
            			  	  value['person']+','+value['checkin']+','+value['checkout']+','+value['name']+','+['mobile']+'</option>';
@@ -151,7 +152,7 @@
     	 return false;
       })
         .on('click','#btnBook',function(){
-   		let roomcode=$('#selType').val();
+   		let roomcode=$('#selRoom').val();
    		let person=$('#human').val();
    		let checkin=$('#period3').val();
    		let checkout=$('#period4').val();

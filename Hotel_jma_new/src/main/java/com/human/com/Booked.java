@@ -11,10 +11,11 @@ public class Booked {
 	int type;
 	int howmany;
 	int max_howmany;
+	String roomname;
 	public Booked() {}
 	public Booked(int bookcode, int roomcode, int person, String checkin, String checkout, String name, String mobile,
-			int type, int howmany, int max_howmany) {
-	
+			int type, int howmany, int max_howmany,String roomname) {
+		this.roomname = roomname;
 		this.bookcode = bookcode;
 		this.roomcode = roomcode;
 		this.person = person;
@@ -85,6 +86,12 @@ public class Booked {
 	}
 	public void setMax_howmany(int max_howmany) {
 		this.max_howmany = max_howmany;
+	}
+	public String getRoomname() {
+		return roomname;
+	}
+	public void setRoomname(String roomname) {
+		this.roomname = roomname;
 	}
 	
 	
