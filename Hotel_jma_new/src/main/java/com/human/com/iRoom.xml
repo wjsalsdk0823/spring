@@ -39,12 +39,16 @@
    	  select bookcode,roomcode,person,checkin,checkout,name,mobile from booking 
    </select>
    <select id="getBookedList" resultType="com.human.com.Booked">
-   <![CDATA[
-      select *
-      from booking a, room b
-      where a.roomcode = b.roomcode and
-      a.checkout > #{param1} and a.checkin < #{param2}
+
+	  select a.bookcode,b.roomcode,b.type,b.howmany max_howmany,
+      a.person,a.checkin,a.checkout,a.name,a.mobile
+      from booking a,room b
+      where a.checkout &gt; ${param1} and a.checkin &lt; ${param2}
+      and a.roomcode=b.roomcode
       order by a.checkin
-      ]]>
+      
    </select>
+   <delete id="doEmpty">
+   delete from booking where bookcode=#{param1}
+   </delete>
 </mapper>

@@ -227,6 +227,16 @@ public class HomeController {
 		room.doDeleteRoom(roomcode);
 		return  "ok";
 	}
+	@RequestMapping(value="/doEmpty",method = RequestMethod.POST,
+			produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String doEmpty(HttpServletRequest hsr) {
+		int bookcode=Integer.parseInt(hsr.getParameter("bookcode"));
+		iRoom room=sqlSession.getMapper(iRoom.class);
+
+		room.doEmpty(bookcode);
+		return  "ok";
+	}
 	@RequestMapping(value="/addRoom",method = RequestMethod.POST,
 			produces = "application/text; charset=utf8")
 	@ResponseBody
@@ -267,21 +277,14 @@ public class HomeController {
 	      iRoom booking=sqlSession.getMapper(iRoom.class);
 	      ArrayList<Book> getbookingList=booking.getBookingList();
 	      JSONArray j1=new JSONArray();
-	      for(int i = 0;i<getbookingList.size(); i++) {
-	    	  System.out.println("arr");
+	      for(int i = 0;i<getbookingList.size(); i++) {	    	  
 	    	JSONObject jo1 = new JSONObject();
-	    	jo1.put("bookcode",getbookingList.get(i).getBookcode());
-	    	System.out.println(jo1+"bookcode");
-	    	jo1.put("roomcode",getbookingList.get(i).getRoomcode());
-	    	System.out.println(jo1+"room");
-	    	jo1.put("person",getbookingList.get(i).getPerson());
-	    	System.out.println(jo1+"per");
-	    	jo1.put("checkin",getbookingList.get(i).getCheckin());
-	    	System.out.println(jo1+"che");
+	    	jo1.put("bookcode",getbookingList.get(i).getBookcode());	    	
+	    	jo1.put("roomcode",getbookingList.get(i).getRoomcode());	  
+	    	jo1.put("person",getbookingList.get(i).getPerson());	
+	    	jo1.put("checkin",getbookingList.get(i).getCheckin());	   
 	    	jo1.put("checkout",getbookingList.get(i).getCheckout());
-	    	System.out.println(jo1+"out");
-	    	jo1.put("name",getbookingList.get(i).getName());
-	    	System.out.println(jo1+"name");
+	    	jo1.put("name",getbookingList.get(i).getName());	  
 	    	jo1.put("mobile",getbookingList.get(i).getMobile());
 	    	j1.add(jo1);	    	
 	      }
@@ -291,15 +294,15 @@ public class HomeController {
 	
 	  @RequestMapping(value="/getBookedList",method=RequestMethod.POST,
 	  produces="application/text; charset=utf8")
-	  
-	  @ResponseBody 
-	  public String Booked(HttpServletRequest hsr) { 
+	  @ResponseBody public String Booked(HttpServletRequest hsr) { 
 	  iRoom booking=sqlSession.getMapper(iRoom.class);
-	  String checkin=hsr.getParameter("checkin");
-	  String checkout=hsr.getParameter("checkout");
-	  ArrayList<Booked> getbookedList=booking.getBookedList(); 
+	  String checkin=hsr.getParameter("checkin"); 
+	  String checkout=hsr.getParameter("checkout"); 
+	  System.out.println(checkin); 
+	  ArrayList<Booked> getbookedList=booking.getBookedList(checkin,checkout); 
 	  JSONArray a1=new JSONArray();
-	  System.out.println("a1"); for(int i = 0;i<getbookedList.size(); i++) {
+	  System.out.println("a1"); 
+	  for(int i = 0;i<getbookedList.size(); i++) {
 	  System.out.println("arr"); JSONObject jo1 = new JSONObject();
 	  jo1.put("bookcode",getbookedList.get(i).getBookcode());
 	  System.out.println(jo1+"bookcode");
@@ -313,7 +316,9 @@ public class HomeController {
 	  System.out.println(jo1+"out");
 	  jo1.put("name",getbookedList.get(i).getName());
 	  System.out.println(jo1+"name");
-	  jo1.put("mobile",getbookedList.get(i).getMobile()); a1.add(jo1); }
-	  System.out.println(a1.toString()); return a1.toString(); }
-	 
+	  jo1.put("mobile",getbookedList.get(i).getMobile());
+	  a1.add(jo1);
+	  }
+	return a1.toString();
+	  }
 }

@@ -2,15 +2,19 @@ package com.human.com;
 
 public class Booked {
 	int bookcode;
-	String roomcode;
+	int roomcode;
 	int person;
 	String checkin;
 	String checkout;
 	String name;
 	String mobile;
+	int type;
+	int howmany;
+	int max_howmany;
 	public Booked() {}
-	public Booked(int bookcode, String roomcode, int person, String checkin, String checkout, String name,
-			String mobile) {
+	public Booked(int bookcode, int roomcode, int person, String checkin, String checkout, String name, String mobile,
+			int type, int howmany, int max_howmany) {
+	
 		this.bookcode = bookcode;
 		this.roomcode = roomcode;
 		this.person = person;
@@ -18,6 +22,9 @@ public class Booked {
 		this.checkout = checkout;
 		this.name = name;
 		this.mobile = mobile;
+		this.type = type;
+		this.howmany = howmany;
+		this.max_howmany = max_howmany;
 	}
 	public int getBookcode() {
 		return bookcode;
@@ -25,10 +32,10 @@ public class Booked {
 	public void setBookcode(int bookcode) {
 		this.bookcode = bookcode;
 	}
-	public String getRoomcode() {
+	public int getRoomcode() {
 		return roomcode;
 	}
-	public void setRoomcode(String roomcode) {
+	public void setRoomcode(int roomcode) {
 		this.roomcode = roomcode;
 	}
 	public int getPerson() {
@@ -61,6 +68,24 @@ public class Booked {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public int getHowmany() {
+		return howmany;
+	}
+	public void setHowmany(int howmany) {
+		this.howmany = howmany;
+	}
+	public int getMax_howmany() {
+		return max_howmany;
+	}
+	public void setMax_howmany(int max_howmany) {
+		this.max_howmany = max_howmany;
+	}
+	
 	
 }
