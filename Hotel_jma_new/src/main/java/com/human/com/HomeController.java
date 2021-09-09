@@ -321,4 +321,26 @@ public class HomeController {
 	  }
 	return a1.toString();
 	  }
+	  @RequestMapping(value="/getNotbooked",method = RequestMethod.POST,
+				produces = "application/text; charset=utf8")
+		@ResponseBody
+		public String getNotbooked(HttpServletRequest hsr) {
+			iRoom room=sqlSession.getMapper(iRoom.class);
+			String checkin=hsr.getParameter("checkin"); 
+			String checkout=hsr.getParameter("checkout");
+			System.out.println(checkin+","+checkout);
+			ArrayList<Roominfo> roominfo=room.getNotbooked(checkin,checkout);//camel notation 
+			//찾아진 데이터로 joonarray만들기
+			JSONArray ja = new JSONArray();
+			for(int i=0;i<roominfo.size();i++) {
+				JSONObject jo=new JSONObject();
+				jo.put("roomcode", roominfo.get(i).getRoomcode());
+				jo.put("roomname", roominfo.get(i).getRoomname());
+				jo.put("typename", roominfo.get(i).getTypename());
+				jo.put("howmany", roominfo.get(i).getHowmany());			
+				jo.put("howmuch", roominfo.get(i).getHowmuch());
+				ja.add(jo);
+			}
+			return ja.toString();
+		}
 }

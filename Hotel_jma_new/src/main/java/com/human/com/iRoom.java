@@ -16,4 +16,5 @@ public interface iRoom {
 	void doSignin(String name,String loginid, String passcode);
 	int doCheckUser(String userid,String passcode);
 	void doAddBooking(int roomcode, int person,String checkin, String checkout,String name, String mobile);
+	ArrayList<Roominfo> getNotbooked(String checkin, String checkout);
 }

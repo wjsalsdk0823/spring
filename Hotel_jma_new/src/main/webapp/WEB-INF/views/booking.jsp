@@ -123,6 +123,17 @@
            			  	  $('#selBooked').append(str);
            		  });
            	  },'json');
+    	  $.post("http://localhost:8081/getNotbooked",
+    			  {checkin:$('#period1').val(),checkout:$('#period2').val()},
+    			  function(result){
+    		  console.log(result);
+    		  $('#selRoom').empty();
+    		  $.each(result,function(ndx,value){
+    			  str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
+    			  	  value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+    			  	  $('#selRoom').append(str);
+    		  });
+    	  },'json');        
          })
        
       .on('click','#selRoom option',function(){
@@ -164,13 +175,21 @@
       alert('누락된 값이 있습니다.');
       return false;
    }  
-      $.post('http://localhost:8081/addbooking',
-            {roomcode:roomcode,person:person,checkin:checkin,checkout:checkout, name: name,mobile:mobile},
-            function(result){
-               if(result=='ok') {
-                  location.reload();
-               }
-            },'text');
+   if($("#bookcode").val() == ''  ) {
+	   $.post('http://localhost:8081/addbooking',
+	            {roomcode:roomcode,person:person,checkin:checkin,checkout:checkout, name: name,mobile:mobile},
+	            function(result){
+	               if(result=='ok') {
+	                  location.reload();
+	               }
+	            },'text');  
+	 
+   }else {
+	   
+	   
+	   
+   }
+   
    
    })
    

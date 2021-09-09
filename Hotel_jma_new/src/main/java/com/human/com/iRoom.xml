@@ -40,23 +40,26 @@
    </select>
    <select id="getBookedList" resultType="com.human.com.Booked">
 
- select
+ 	  select
       a.bookcode,a.roomcode,b.name roomname,a.person,a.checkin,a.checkout,a.name,a.mobile
       from booking a,room b
       where a.checkout &gt; #{param1} and a.checkin &lt; #{param2}
       and a.roomcode=b.roomcode
-      order by bookcode    
+      order by bookcode   
       
    </select>
    <delete id="doEmpty">
    delete from booking where bookcode=#{param1}
    </delete>
-   <select id="getNotbooked">
-   select * from room 
-   where roomcode in(
-   select roomcode from room
-   minus
-   select distinct roomcode from booking where checkout &gt; ${param1} and checkin &lt; ${param2} 
-   )
+   <select id="getNotbooked" resultType="com.human.com.Roominfo">
+   		select 
+   		a.roomcode,a.name roomname,b.name typename,a.howmany,a.howmuch 
+     	from room a, roomtype b
+  	    where roomcode in(
+   		select roomcode from room
+  		minus
+   		select distinct roomcode from booking where checkout &gt; #{param1} and checkin &lt; #{param2} 
+   		)
+   		and a.type=b.typecode
    </select>
 </mapper>
