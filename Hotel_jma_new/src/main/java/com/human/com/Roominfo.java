@@ -6,14 +6,21 @@ public class Roominfo {
 	private String typename;
 	private int howmany;
 	private int howmuch;
+	private int person;
+	private String name;
+	private String mobile;
 	public Roominfo() {}
-	public Roominfo(int roomcode, String roomname, String typename, int howmany, int howmuch) {
+	public Roominfo(int roomcode, String roomname, String typename, int howmany, int howmuch, int person, String name,
+			String mobile) {
 		//super();
 		this.roomcode = roomcode;
 		this.roomname = roomname;
 		this.typename = typename;
 		this.howmany = howmany;
 		this.howmuch = howmuch;
+		this.person = person;
+		this.name = name;
+		this.mobile = mobile;
 	}
 	public int getRoomcode() {
 		return roomcode;
@@ -45,6 +52,23 @@ public class Roominfo {
 	public void setHowmuch(int howmuch) {
 		this.howmuch = howmuch;
 	}
-
-	
+	public int getPerson() {
+		return person;
+	}
+	public void setPerson(int person) {
+		this.person = person;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+			
 }

@@ -62,4 +62,8 @@
    		)
    		and a.type=b.typecode
    </select>
+	<update id="doUpdate">
+		update booking set person=#{param2},name=#{param3},mobile=#{param4}
+		where bookcode=#{param1}
+	</update>
 </mapper>

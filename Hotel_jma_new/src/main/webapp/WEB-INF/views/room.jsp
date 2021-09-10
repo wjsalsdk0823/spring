@@ -116,10 +116,6 @@
     	 } else {//update
     		//debug하는법
     	 	//console.log('roomname ['+roomname+'])
-    	 	//console.log('roomtype ['+roomtype+'])
-    	 	//console.log('howmany ['+howmany+'])
-    	 	//console.log('howmuch ['+howmuch+'])
-    	 	//console.log('roomcode ['+roomcode+'])
     		 $.post('http://localhost:8080/updateRoom',
     				 {roomcode:roomcode,roomname:roomname,
     			 	 roomtype:roomtype,howmany:howmany,
@@ -130,7 +126,7 @@
     			 		 }
     			 	 },'text');
     	 } 
-    	  
+    	
        })    
       </script>
       </html>
