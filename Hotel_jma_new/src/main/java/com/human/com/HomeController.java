@@ -119,38 +119,24 @@ public class HomeController {
 	         return "booking";
 			
 	}
-	@RequestMapping(value="/addbooking",method=RequestMethod.POST,
+	@RequestMapping(value="/addBooking",method=RequestMethod.POST,
 	         produces="application/text; charset=utf8")
 	   @ResponseBody
 	   public String addbooking(HttpServletRequest hsr) {
 	      System.out.println("addbooking");
 	      //int bookcode=Integer.parseInt(hsr.getParameter("bookcode"));
-	      //System.out.println(bookcode);
-	      int roomcode=Integer.parseInt(hsr.getParameter("roomcode"));
-	      System.out.println(roomcode+"roomcode");
-	      
+	      // System.out.println("bookcode");
+	      int roomcode=Integer.parseInt(hsr.getParameter("roomcode"));	      
 	      int person=Integer.parseInt(hsr.getParameter("person"));
-	      System.out.println(person+"person");
-	      
-	      String checkin=hsr.getParameter("checkin");
-	      System.out.println(checkin+"checkin");
-	      
-	      String checkout=hsr.getParameter("checkout");
-	      System.out.println(checkout+"che");
-	      
-	      String name=hsr.getParameter("name");
-	      System.out.println(name+"name");
-	      
-	      String mobile=hsr.getParameter("mobile");
-	      System.out.println(mobile+"mobile");
-	      
+	      String checkin=hsr.getParameter("checkin");	    	      
+	      String checkout=hsr.getParameter("checkout");	     	      
+	      String name=hsr.getParameter("name");	  	      
+	      String mobile=hsr.getParameter("mobile");	    
 	      iRoom room=sqlSession.getMapper(iRoom.class);
 	      System.out.println(roomcode+","+person+","+checkin+","+checkout+","+name+","+mobile);
 	      room.doAddBooking(roomcode,person,checkin,checkout,name,mobile);
 	      return "ok";
 	   }
-
-
 
 	@RequestMapping("/room")
 	public String room(HttpServletRequest hsr, Model model) {
@@ -166,9 +152,7 @@ public class HomeController {
 			/*
 			 * ArrayList<Roominfo> roominfo=room.getRoomList();
 			 * model.addAttribute("list",roominfo);
-			 */
-			 
-			
+			 */		
 			ArrayList<RoomType> roomtype=room.getRoomType();			
 			model.addAttribute("list2",roomtype);
 		return"room";
@@ -217,7 +201,7 @@ public class HomeController {
 			ja.add(jo);
 		}
 		return ja.toString();
-	}
+}
 	@RequestMapping(value="/deleteRoom",method = RequestMethod.POST,
 			produces = "application/text; charset=utf8")
 	@ResponseBody
@@ -226,7 +210,7 @@ public class HomeController {
 		iRoom room=sqlSession.getMapper(iRoom.class);
 		room.doDeleteRoom(roomcode);
 		return  "ok";
-	}
+}
 	@RequestMapping(value="/doEmpty",method = RequestMethod.POST,
 			produces = "application/text; charset=utf8")
 	@ResponseBody
@@ -236,7 +220,7 @@ public class HomeController {
 
 		room.doEmpty(bookcode);
 		return  "ok";
-	}
+}
 	@RequestMapping(value="/addRoom",method = RequestMethod.POST,
 			produces = "application/text; charset=utf8")
 	@ResponseBody
@@ -248,27 +232,23 @@ public class HomeController {
 		iRoom room=sqlSession.getMapper(iRoom.class);
 		room.doAddRoom(rname,rtype,howmany,howmuch);
 		return "ok";
-	}
+}
 	@RequestMapping(value="/updateRoom",method = RequestMethod.POST,
 			produces = "application/text; charset=utf8")
 	@ResponseBody
 	public String updateRoom(HttpServletRequest hsr) {
 		iRoom room=sqlSession.getMapper(iRoom.class);
-		int roomcode=Integer.parseInt(hsr.getParameter("roomcode"));
-				
+		int roomcode=Integer.parseInt(hsr.getParameter("roomcode"));				
 		String roomname=hsr.getParameter("roomname");
 		int roomtype=Integer.parseInt(hsr.getParameter("roomtype"));
-		//System.out.println("roomcode ["+roomcode+"]");
-		//System.out.println("roomcode ["+roomname+"]");
-		//System.out.println("roomcode ["+roomtype+"]");
-		
+		//System.out.println("roomcode ["+roomcode+"]");			
 		room.doUpdateRoom(Integer.parseInt(hsr.getParameter("roomcode")),
-				hsr.getParameter("roomname"),
-				Integer.parseInt(hsr.getParameter("roomtype")),
-				Integer.parseInt(hsr.getParameter("howmany")),
-				Integer.parseInt(hsr.getParameter("howmuch")));		
+		hsr.getParameter("roomname"),
+		Integer.parseInt(hsr.getParameter("roomtype")),
+		Integer.parseInt(hsr.getParameter("howmany")),
+		Integer.parseInt(hsr.getParameter("howmuch")));		
 		return "ok";
-	}
+}
 	@RequestMapping(value="/getBookingList",method=RequestMethod.POST,
 	         produces="application/text; charset=utf8")
 	   @ResponseBody
@@ -290,8 +270,7 @@ public class HomeController {
 	      }
 	      System.out.println(j1.toString());
 	      return j1.toString();
-	}
-	
+     }	
 	  @RequestMapping(value="/getBookedList",method=RequestMethod.POST,
 	  produces="application/text; charset=utf8")
 	  @ResponseBody public String Booked(HttpServletRequest hsr) { 
@@ -305,22 +284,16 @@ public class HomeController {
 	  for(int i = 0;i<getbookedList.size(); i++) {
 	  System.out.println("arr"); JSONObject jo1 = new JSONObject();
 	  jo1.put("bookcode",getbookedList.get(i).getBookcode());
-	  System.out.println(jo1+"bookcode");
 	  jo1.put("roomcode",getbookedList.get(i).getRoomcode());
-	  System.out.println(jo1+"room");
 	  jo1.put("person",getbookedList.get(i).getPerson());
-	  System.out.println(jo1+"per");
 	  jo1.put("checkin",getbookedList.get(i).getCheckin());
-	  System.out.println(jo1+"che");
 	  jo1.put("checkout",getbookedList.get(i).getCheckout());
-	  System.out.println(jo1+"out");
 	  jo1.put("name",getbookedList.get(i).getName());
-	  System.out.println(jo1+"name");
 	  jo1.put("mobile",getbookedList.get(i).getMobile());
 	  a1.add(jo1);
 	  }
 	return a1.toString();
-	  }
+      }  
 	  @RequestMapping(value="/getNotbooked",method = RequestMethod.POST,
 				produces = "application/text; charset=utf8")
 		@ResponseBody
@@ -343,4 +316,17 @@ public class HomeController {
 			}
 			return ja.toString();
 		}
-}
+	  @RequestMapping(value="/doUpdate",method = RequestMethod.POST,
+				produces = "application/text; charset=utf8")
+		@ResponseBody
+			public String update(HttpServletRequest hsr) {
+			
+			int bookcode=Integer.parseInt(hsr.getParameter("bookcode"));
+			int person=Integer.parseInt(hsr.getParameter("person"));
+			String name=hsr.getParameter("name");
+			String mobile=hsr.getParameter("mobile"); 
+			iRoom room=sqlSession.getMapper(iRoom.class);
+			room.doUpdate(bookcode,person,name,mobile);
+			return "ok";
+	}
+}	

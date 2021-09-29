@@ -45,10 +45,10 @@
         		<td align=right>객실종류</td>
         		<td>
         			<select size=4 style='width:150px;' id=selType>
-				     	<option value=1>suite room</option>
-		           		<option value=2>twin room</option>
-		            	<option value=3>double room</option>
-		            	<option value=4>single room</option>
+				     	<option value=1>Suite Room</option>
+		           		<option value=2>Family Room</option>
+		            	<option value=3>Double Room</option>
+		            	<option value=4>Single Room</option>
         			</select>	
         		</td>
         	</tr>
@@ -81,7 +81,7 @@
         	</table><td> 
         	<table>
         	<tr>예약된 객실<br>
-        	<select id=selBooked style='width:230px;' size=15></select>
+        	<select id=selBooked style='width:300px;' size=15></select>
         	</tr>
         	</table>
         </td><tr>  
@@ -92,8 +92,8 @@
       <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
       <script>
       $(document)
-      .ready(function(){    
-    	  $.post("http://localhost:8081/getRoomList",{},function(result){
+      .ready(function(){    //R부분도 안되나요?
+    	  $.post("http://localhost:8080/getRoomList",{},function(result){
     		  console.log(result);
     		  $.each(result,function(ndx,value){
     			  str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
@@ -101,7 +101,7 @@
     			  	  $('#selRoom').append(str);
     		  });
     	  },'json');             
-        	  $.post("http://localhost:8081/getBookingList",{},function(result){
+        	  $.post("http://localhost:8080/getBookingList",{},function(result){
         		  console.log(result);
         		  $.each(result,function(ndx,value){
         			  str='<option value="'+value['bookcode']+'">'+value['roomcode']+','+
@@ -112,7 +112,7 @@
       })
    
       .on('click','#look',function(){
-    	  $.post("http://localhost:8081/getBookedList",
+    	  $.post("http://localhost:8080/getBookedList",
        		   {checkin:$('#period1').val(),checkout:$('#period2').val()},
        		   function(result){
            		  console.log(result);
@@ -123,7 +123,7 @@
            			  	  $('#selBooked').append(str);
            		  });
            	  },'json');
-    	  $.post("http://localhost:8081/getNotbooked",
+    	  $.post("http://localhost:8080/getNotbooked",
     			  {checkin:$('#period1').val(),checkout:$('#period2').val()},
     			  function(result){
     		  console.log(result);
@@ -154,12 +154,36 @@
  		}else if(typecode==4){
  			$('#select_room1').val(4).prop("selected", true);
  		}
+    	 
+       let checkin1=$('#period1').val();
+  	   let checkout1=$('#period2').val();
+  	   
+  	   $('#period3').val(checkin1);
+  	   $('#period4').val(checkout1);
+  	   
+  	   let checkin=$('#period3').val();
+	   let checkout=$('#period4').val();
+	   
+ 		let str1=$('#selRoom option:selected').text();
+		let ar1=str1.split(',');
+		console.log(str1);
+		console.log(ar1[3]);
+	    if(checkin=='' || checkout=='')return false;
+	   checkin=new Date(checkin);
+	   checkout=new Date(checkout);//새로운데이터..?
+	   if(checkin > checkout) {
+		   alert('check확인'); return false;
+	   }
+	   console.log(checkin,checkout);
+	   let ms=Math.abs(checkout-checkin);
+	   let days=Math.ceil(ms/(1000*60*60*24));			   
+	   let total=days*parseInt(ar1[3]);//parseInt는 정수형으로 바꾼다? 
+	   $('#total').val(total);
+	   return false; 
+    	 
     	 let code=$(this).val();
     	 $('#roomcode').val(code);
-    	 var period1 = String($("#period1").val());
-    	 var period2 = String($("#period2").val());
-    	 $("#period3").val(period1);
-    	 $("#period4").val(period2);
+    	
     	 return false;
       })
         .on('click','#btnBook',function(){
@@ -169,15 +193,19 @@
    		let checkout=$('#period4').val();
   		let name=$('#booker').val();
    		let mobile=$('#mobile').val();
+   		let bookcode=$('#bookcode').val();
    		$('#period3','#period4').trigger('change');
    // validation(유효성 검사)
    if(roomcode=='' || person=='' || checkin=='' || checkout=='' || name=='' || mobile=='') {
       alert('누락된 값이 있습니다.');
       return false;
    }  
-   if($("#bookcode").val() == ''  ) {
-	   $.post('http://localhost:8081/addbooking',
-	            {roomcode:roomcode,person:person,checkin:checkin,checkout:checkout, name: name,mobile:mobile},
+   //업데이트 
+
+    if($("#bookcode").val() == '') {
+	   $.post('http://localhost:8080/addBooking',
+	            {roomcode:roomcode,person:person,checkin:checkin,
+		         checkout:checkout, name:name,mobile:mobile},
 	            function(result){
 	               if(result=='ok') {
 	                  location.reload();
@@ -185,13 +213,16 @@
 	            },'text');  
 	 
    }else {
-	   
-	   
-	   
-   }
-   
-   
-   })
+	   $.post('http://localhost:8080/doUpdate',
+	            {roomcode:roomcode,bookcode:bookcode,checkin:checkin,
+	         	checkout:checkout,person:person,name:name,mobile:mobile},
+	            function(result){
+	               if(result=='ok') {
+	                  location.reload();
+	               }
+	            },'text');  	   
+   }      
+})
    
    .on('click','#btnDelete',function(){
 	   console.log("btn")
@@ -200,6 +231,7 @@
     .on('click','#selBooked option',function(){
     	let str=$(this).text();
     	let ar=str.split(',');
+    	//console.log(ar);
     	 $("#roomcode").val(ar[0]);
     	 $("#human").val(ar[1]);
     	 $("#period3").val(ar[2]);
@@ -213,7 +245,7 @@
    
     .on('click','#btnEmpty',function(){
     	console.log($('#bookcode').val());
-	    $.post("http://localhost:8081/doEmpty",
+	    $.post("http://localhost:8080/doEmpty",
 	    		{bookcode:$('#bookcode').val()},	    		
 	   	 	function(result){
 	    	console.log(result)
@@ -226,14 +258,14 @@
    })   
    
    
-   .on('change','#period3,#period4',function(){
+ /*  .on('change','#period3,#period4',function(){
 	   let checkin=$('#period3').val();
 	   let checkout=$('#period4').val();
    		let str1=$('#selRoom option:selected').text();
 		let ar1=str1.split(',');
 		console.log(str1);
 		console.log(ar1[3]);
-	   if(checkin=='' || checkout=='')return false;
+	    if(checkin=='' || checkout=='')return false;
 	   checkin=new Date(checkin);
 	   checkout=new Date(checkout);//새로운데이터..?
 	   if(checkin > checkout) {
@@ -241,16 +273,12 @@
 	   }
 	   console.log(checkin,checkout);
 	   let ms=Math.abs(checkout-checkin);
-	   let days=Math.ceil(ms/(1000*60*60*24));
-			   
+	   let days=Math.ceil(ms/(1000*60*60*24));			   
 	   let total=days*parseInt(ar1[3]);//parseInt는 정수형으로 바꾼다? 
 	   $('#total').val(total);
-	   return false;
-   })
-   .on('click','#look',function(){
-	   $('#roomcode,#name,#type,#howmany,#howmuch').val();
-   })
-   
+	   return false; 
+   })*/
+
       </script> 
 </table> 
 </body>
